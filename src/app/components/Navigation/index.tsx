@@ -106,7 +106,7 @@ class NavigationC extends React.Component<IProps> {
         pathname: `/${type}/${value}`
       });
 
-      getClips(this.props.dispatch, { type, search: search.value });
+      getClips(this.props.dispatch, { type, search: value });
     };
 
     return (
