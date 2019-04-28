@@ -1,0 +1,14 @@
+version: '3.1'
+services:
+  twitchclips:
+    build: .
+    ports:
+      - 8889:8889
+      - 8890:8890
+    volumes:
+      - ./cert:/www/twitchclips/cert
+    environment:
+      HOST: 'docker.dev'
+      HTTP_PORT: 8889
+      HTTPS_PORT: 8890
+    restart: unless-stopped

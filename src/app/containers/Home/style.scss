@@ -1,0 +1,59 @@
+.Home {
+
+  h2 {
+    margin: 0 0 1em 0;
+    font-size: 1.3em;
+  }
+
+  .clip {
+    img {
+      max-width: 100%;
+      margin-bottom: 0.5em;
+    }
+
+    .description {
+      margin-bottom: 2em;
+      font-size: 13px;
+      line-height: 18px;
+      color: rgb(96, 96, 96);
+
+      .title {
+        font-weight: 500;
+        margin-bottom: 0.3em;
+        display: -webkit-box;
+        max-width: 100%;
+        height: 36px;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        font-size: 14px;
+        
+        a {
+          color: rgb(10, 10, 10);
+        }
+      }
+
+      .broadcaster {
+        a {
+          color: rgb(96, 96, 96);
+        }
+
+        &:after {
+          content: '•';
+          margin: 0 4px;
+        }
+      }
+
+      .views {
+        &:after {
+          content: '•';
+          margin: 0 4px;
+        }
+      }
+
+      .game {
+      }
+    }
+  }
+}
