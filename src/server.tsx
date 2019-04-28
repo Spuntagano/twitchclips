@@ -92,6 +92,7 @@ if (appConfig.httpPort) {
   });
 }
 
+console.log(appConfig);
 if (appConfig.httpsPort) {
   const credentials = {
     key: fs.readFileSync('cert/privkey.pem').toString(),

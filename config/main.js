@@ -2,8 +2,8 @@
 
 var config = {
   env: process.env.NODE_ENV || 'development',
-  httpPort: Number(process.env.HTTP_PORT) || 8889,
-  httpsPort: Number(process.env.HTTPS_PORT) || 8890,
+  httpPort: Number(process.env.HTTP_PORT),
+  httpsPort: Number(process.env.HTTPS_PORT),
   karmaPort: 9876,
 
   // This part goes to React-Helmet for Head of our HTML
