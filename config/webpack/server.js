@@ -103,7 +103,6 @@ var config = {
       'process.env': {
         BROWSER: JSON.stringify(false),
         NODE_ENV: JSON.stringify(process.env.NODE_ENV),
-        HOST: JSON.stringify(process.env.HOST),
         HTTP_PORT: JSON.stringify(process.env.HTTP_PORT),
         HTTPS_PORT: JSON.stringify(process.env.HTTPS_PORT)
       },

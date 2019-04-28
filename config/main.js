@@ -2,7 +2,6 @@
 
 var config = {
   env: process.env.NODE_ENV || 'development',
-  host: process.env.HOST || 'localhost',
   httpPort: Number(process.env.HTTP_PORT) || 8889,
   httpsPort: Number(process.env.HTTPS_PORT) || 8890,
   karmaPort: 9876,

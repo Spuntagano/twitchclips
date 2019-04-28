@@ -82,26 +82,30 @@ app.get('*', async (req, res) => {
   res.status(200).send(page);
 });
 
-http.createServer(app).listen(appConfig.httpPort, appConfig.host, (err: Error) => {
-  if (err) {
-    console.error(Chalk.bgRed(String(err)));
-  } else {
-    console.info(Chalk.black.bgGreen(`\n\n💂  Listening at http://${appConfig.host}:${appConfig.httpPort}\n`));
-  }
-});
+if (appConfig.httpPort) {
+  http.createServer(app).listen(appConfig.httpPort, (err: Error) => {
+    if (err) {
+      console.error(Chalk.bgRed(String(err)));
+    } else {
+      console.info(Chalk.black.bgGreen(`\n\n💂  Listening on port: ${appConfig.httpPort}\n`));
+    }
+  });
+}
 
-const credentials = {
-  key: fs.readFileSync('cert/privkey.pem').toString(),
-  cert: fs.readFileSync('cert/fullchain.pem').toString()
-};
+if (appConfig.httpsPort) {
+  const credentials = {
+    key: fs.readFileSync('cert/privkey.pem').toString(),
+    cert: fs.readFileSync('cert/fullchain.pem').toString()
+  };
 
-https.createServer(credentials, app).listen(appConfig.httpsPort, appConfig.host, (err: Error) => {
-  if (err) {
-    console.error(Chalk.bgRed(String(err)));
-  } else {
-    console.info(Chalk.black.bgGreen(`\n\n💂  Listening at https://${appConfig.host}:${appConfig.httpsPort}\n`));
-  }
-});
+  https.createServer(credentials, app).listen(appConfig.httpsPort, (err: Error) => {
+    if (err) {
+      console.error(Chalk.bgRed(String(err)));
+    } else {
+      console.info(Chalk.black.bgGreen(`\n\n💂  Listening on port: ${appConfig.httpsPort}\n`));
+    }
+  });
+}
 
 function renderHTML(markup: string, store: any) {
   const html = renderToString(<Html markup={markup} manifest={manifest} store={store} />);

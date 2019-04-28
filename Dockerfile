@@ -7,4 +7,4 @@ RUN npm install
 EXPOSE 8889
 EXPOSE 8890
 
-CMD ["npm", "run", "start"]
+CMD ["npm", "run", "start:prod"]
