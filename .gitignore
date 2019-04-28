@@ -47,6 +47,9 @@ typings
 
 # Docker
 docker-compose.yml
-
+    
 # Certs
 cert
+
+# VSCode
+.vscode
