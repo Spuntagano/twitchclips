@@ -42,8 +42,11 @@ typings
 .idea
 .awcache
 
-#env
+# env
 .env
 
 # Docker
 docker-compose.yml
+
+# Certs
+cert
