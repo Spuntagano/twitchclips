@@ -87,7 +87,7 @@ if (appConfig.httpPort) {
     if (err) {
       console.error(Chalk.bgRed(String(err)));
     } else {
-      console.info(Chalk.black.bgGreen(`\n\n💂  Listening on port: ${appConfig.httpPort}\n`));
+      console.info(Chalk.black.bgGreen(`\n\n💂  http listening on port: ${appConfig.httpPort}\n`));
     }
   });
 }
@@ -102,7 +102,7 @@ if (appConfig.httpsPort) {
     if (err) {
       console.error(Chalk.bgRed(String(err)));
     } else {
-      console.info(Chalk.black.bgGreen(`\n\n💂  Listening on port: ${appConfig.httpsPort}\n`));
+      console.info(Chalk.black.bgGreen(`\n\n💂  https listening on port: ${appConfig.httpsPort}\n`));
     }
   });
 }
