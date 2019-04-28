@@ -44,3 +44,6 @@ typings
 
 #env
 .env
+
+# Docker
+docker-compose.yml
