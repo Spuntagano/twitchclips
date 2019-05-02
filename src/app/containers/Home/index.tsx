@@ -10,14 +10,16 @@ import { IStore } from '../../redux/IStore';
 import Col from 'antd/lib/col';
 import Row from 'antd/lib/row';
 import Layout from 'antd/lib/layout';
-import { Spinner } from '../../components';
+import { Spinner, Filters } from '../../components';
+import _ from 'lodash';
 
 const { Content } = Layout;
 const style = require('./style.scss');
 
 interface IMatchParams {
   type: string;
-  title: string;
+  name: string;
+  period: string;
 }
 
 interface IProps {
@@ -26,18 +28,32 @@ interface IProps {
 }
 
 class HomeC extends React.Component<RouteComponentProps<IMatchParams> & IProps> {
-  /*
-  public static async fetchData(store: any) {
-    await getClips(store.dispatch);
-  }
-  */
+  // public static async fetchData(store: any, match: any) {
+  //   await getClips(store.dispatch, {
+  //     type: match.params.type,
+  //     name: match.params.name,
+  //     period: match.params.period || 'week'
+  //   });
+  // }
 
   public componentDidMount() {
-    if (!this.props.clips.labels.top.length) {
+    const { match, clips, dispatch } = this.props;
+
+    if (!_.isEqual(match.params, clips.search)) {
+      getClips(dispatch, {
+        type: match.params.type,
+        name: match.params.name,
+        period: match.params.period || 'week'
+      });
+    }
+  }
+
+  public componentWillReceiveProps(nextProps: RouteComponentProps<IMatchParams> & IProps) {
+    if (!_.isEqual(this.props.match.params, nextProps.match.params)) {
       getClips(this.props.dispatch, {
-        type: this.props.match.params.type,
-        search: this.props.match.params.title,
-        period: 'all'
+        type: nextProps.match.params.type,
+        name: nextProps.match.params.name,
+        period: nextProps.match.params.period || 'week'
       });
     }
   }
@@ -56,8 +72,12 @@ class HomeC extends React.Component<RouteComponentProps<IMatchParams> & IProps> 
               <Link to={`/clip/${slug}`}>{clips.data[slug].title}</Link>
             </div>
             <div>
-              <span className={style.broadcaster}>{clips.data[slug].broadcaster.display_name}</span>
-              <span className={style.game}>{clips.data[slug].game}</span>
+              <span className={style.broadcaster}>
+                <Link to={`/channel/${clips.data[slug].broadcaster.display_name}/${clips.search.period}`}>{clips.data[slug].broadcaster.display_name}</Link>
+              </span>
+              <span className={style.game}>
+                <Link to={`/game/${clips.data[slug].game}/${clips.search.period}`}>{clips.data[slug].game}</Link>
+              </span>
             </div>
               <div>
                 <span className={style.views}>{numeral(clips.data[slug].views).format('0,0')} views</span>
@@ -77,6 +97,7 @@ class HomeC extends React.Component<RouteComponentProps<IMatchParams> & IProps> 
     return (
       <div className={style.Home}>
         <Content>
+          <Filters />
           {clips.isFetching && <Spinner />}
           {clips.error && <h2>Error loading clips</h2>}
           {!clips.isFetching && !clips.error && !clips.labels.top.length && <h2>No results found</h2>}

@@ -18,9 +18,17 @@ export const routes = [
         component: About
       },
       {
-        path: '/:type/:title',
+        path: '/:type/:name/:period',
         component: Home
-      }
+      },
+      {
+        path: '/:type/:name',
+        component: Home
+      },
+      {
+        path: '/:period',
+        component: Home
+      },
     ],
   },
 ];

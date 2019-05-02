@@ -23,22 +23,20 @@ interface IProps {
 }
 
 class ClipC extends React.Component<RouteComponentProps<IMatchParams> & IProps> {
-  /*
-  public static async fetchData(store: any) {
-    await getClips(store.dispatch);
-  }
-  */
+  // public static async fetchData(store: any, match: any) {
+  //   await getClip(store.dispatch, match.params.slug);
+  // }
 
   public componentDidMount() {
-    const { clips, match } = this.props;
+    const { match, clips } = this.props;
 
-    if (!clips.data[match.params.slug]) {
+    if (clips.labels.single[0] !== match.params.slug) {
       getClip(this.props.dispatch, match.params.slug);
     }
   }
 
   public render() {
-    const { clips, match } = this.props;
+    const { clips } = this.props;
 
     return (
       <div className={style.Clip}>
@@ -47,34 +45,34 @@ class ClipC extends React.Component<RouteComponentProps<IMatchParams> & IProps> 
           {clips.error && <span>Error loading clips</span>}
           <Row gutter={16} type="flex" justify="space-between">
             <Col span={24}>
-                {clips.data[match.params.slug] && <div className={style.video}>
+                {clips.data[clips.labels.single[0]] && <div className={style.video}>
                   <iframe
-                    src={clips.data[match.params.slug].embed_url}
+                    src={clips.data[clips.labels.single[0]].embed_url}
                     scrolling="no"
                     allowFullScreen={true}
                   />
                 </div>}
-                {clips.data[match.params.slug] && <div className={style.description}>
+                {clips.data[clips.labels.single[0]] && <div className={style.description}>
                   <div className={style.title}>
-                      {clips.data[match.params.slug].title}
+                      {clips.data[clips.labels.single[0]].title}
                   </div>
                   <div className={style.views}>
-                      {numeral(clips.data[match.params.slug].views).format('0,0')} views
+                      {numeral(clips.data[clips.labels.single[0]].views).format('0,0')} views
                   </div>
                   <hr />
                   <div className={`${style.broadcaster} clearfix`}>
-                    <img src={clips.data[match.params.slug].broadcaster.logo} alt={clips.data[match.params.slug].broadcaster.name}/>
+                    <img src={clips.data[clips.labels.single[0]].broadcaster.logo} alt={clips.data[clips.labels.single[0]].broadcaster.name}/>
                     <div className={style.broadcasterInfo}>
                       <div className={style.name}>
-                        {clips.data[match.params.slug].broadcaster.name}
+                        {clips.data[clips.labels.single[0]].broadcaster.name}
                       </div>
                       <div className={style.date}>
-                        Created on {moment(clips.data[match.params.slug].created_at).format('MMM Do YYYY')}
+                        Created on {moment(clips.data[clips.labels.single[0]].created_at).format('MMM Do YYYY')}
                       </div>
                     </div>
                   </div>
                 </div>}
-                {!clips.data[match.params.slug] && <div>Clip not found</div>}
+                {!clips.data[clips.labels.single[0]] && <div>Clip not found</div>}
             </Col>
           </Row>
         </Content>

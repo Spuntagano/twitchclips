@@ -5,11 +5,11 @@ import _ from 'lodash';
 import { Form, Field, FieldRenderProps, FormRenderProps } from 'react-final-form';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
-import { getClips } from '../../redux/modules/clips';
 import { getChannels, IChannelsRequest, IChannelsAction } from '../../redux/modules/channels';
 import { getGames, IGamesRequest, IGamesAction } from '../../redux/modules/games';
 import { IStore } from '../../redux/IStore';
 import { History } from 'history';
+import { IClipsRequest } from '../../redux/modules/clips';
 
 const Option = AutoComplete.Option;
 const OptGroup = AutoComplete.OptGroup;
@@ -18,12 +18,13 @@ const style = require('./style.scss');
 interface IProps {
   dispatch: Dispatch;
   games: IGamesRequest;
+  clips: IClipsRequest;
   channels: IChannelsRequest;
   history: History;
 }
 
 interface IForm {
-  search?: string;
+  name?: string;
 }
 
 class NavigationC extends React.Component<IProps> {
@@ -42,7 +43,7 @@ class NavigationC extends React.Component<IProps> {
   }
 
   private splitSearch(search?: string) {
-    let value = search || '';
+    let name = search || '';
     let type = '';
 
     if (search) {
@@ -50,15 +51,19 @@ class NavigationC extends React.Component<IProps> {
 
       if (splitSearch.length === 2) {
         type = splitSearch[0];
-        value = splitSearch[1];
+        name = splitSearch[1];
       }
     }
 
-    return { type, value };
+    return { type, name };
   }
 
   public search(values: IForm) {
-    getClips(this.props.dispatch, { type: 'game', search: values.search });
+    const { clips } = this.props;
+
+    this.props.history.push({
+      pathname: `/game/${values.name}/${clips.search.period}`
+    });
   }
 
   public textFieldAdapter(field: FieldRenderProps<any> & any) {
@@ -92,21 +97,20 @@ class NavigationC extends React.Component<IProps> {
     ));
 
     const onChange = (search: any) => {
-      const { value } = this.splitSearch(search);
+      const { name } = this.splitSearch(search);
 
-      this.getGames(this.props.dispatch, value);
-      this.getChannels(this.props.dispatch, value);
-      field.input.onChange(value);
+      this.getGames(this.props.dispatch, name);
+      this.getChannels(this.props.dispatch, name);
+      field.input.onChange(name);
     };
 
     const onSelect = (search: any) => {
-      const { value, type } = this.splitSearch(search);
+      const { clips } = this.props;
+      const { name, type } = this.splitSearch(search);
 
       this.props.history.push({
-        pathname: `/${type}/${value}`
+        pathname: `/${type}/${name}/${clips.search.period}`
       });
-
-      getClips(this.props.dispatch, { type, search: value });
     };
 
     return (
@@ -150,6 +154,7 @@ export const Navigation = connect(
   (state: IStore) => {
     return {
       games: state.games,
+      clips: state.clips,
       channels: state.channels
     };
   },

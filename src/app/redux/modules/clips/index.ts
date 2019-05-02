@@ -52,6 +52,7 @@ export interface IClipsRequest {
   error?: boolean;
   message?: any;
   labels: ILabels;
+  search: IClipsSearch;
 }
 
 /** Action Types */
@@ -67,6 +68,7 @@ export interface IActionGetClipsSuccess {
   type: typeof GET_CLIPS_SUCCESS;
   data: IClips<IClip>;
   label: string;
+  search: IClipsSearch;
 }
 
 export interface IActionGetClipsFailure {
@@ -74,10 +76,10 @@ export interface IActionGetClipsFailure {
   message: string;
 }
 
-export interface IClipsRequestOptions {
+export interface IClipsSearch {
   type?: string;
-  search?: string;
-  period?: 'day' | 'week' | 'month' | 'all';
+  name?: string;
+  period?: string;
 }
 
 export type IClipsAction = IActionGetClipsRequest | IActionGetClipsSuccess | IActionGetClipsFailure;
@@ -89,6 +91,11 @@ const initialState: IClipsRequest = {
   labels: {
     top: [],
     single: []
+  },
+  search: {
+    type: undefined,
+    name: undefined,
+    period: 'week'
   }
 };
 
@@ -113,6 +120,7 @@ export function clipsReducer(state = initialState, action: IClipsAction) {
           ...state.labels,
           [action.label]: Object.keys(action.data)
         },
+        search: action.search,
         error: false
       };
 
@@ -130,14 +138,17 @@ export function clipsReducer(state = initialState, action: IClipsAction) {
 }
 
 /** Async Action Creator */
-export async function getClips(dispatch: Dispatch<IClipsAction>, clipsRequestOption: IClipsRequestOptions = {}) {
+export async function getClips(dispatch: Dispatch<IClipsAction>, search: IClipsSearch = {}) {
   dispatch(clipsRequest());
 
   try {
     const url = new URL('https://api.twitch.tv/kraken/clips/top');
-    url.searchParams.append('period', 'all');
-    if (clipsRequestOption.type && clipsRequestOption.search) {
-      url.searchParams.append(clipsRequestOption.type, clipsRequestOption.search);
+    if (search.type && search.name) {
+      url.searchParams.append(search.type, search.name);
+    }
+
+    if (search.period) {
+      url.searchParams.append('period', search.period);
     }
 
     const response = await Fetch(url.toString(), {
@@ -152,7 +163,7 @@ export async function getClips(dispatch: Dispatch<IClipsAction>, clipsRequestOpt
       return dispatch(clipsSuccess(json.clips.reduce((accumulator: IClips<IClip>, clip: IClip) => {
         accumulator[clip.slug] = clip;
         return accumulator;
-      }, {}), 'top'));
+      }, {}), 'top', search));
     } else {
       return dispatch(clipsFailure(json.message));
     }
@@ -194,11 +205,12 @@ export function clipsRequest(): IActionGetClipsRequest {
 }
 
 /** Action Creator */
-export function clipsSuccess(data: IClips<IClip>, label: string): IActionGetClipsSuccess {
+export function clipsSuccess(data: IClips<IClip>, label: string, search: IClipsSearch = {}): IActionGetClipsSuccess {
   return {
     type: GET_CLIPS_SUCCESS,
     data,
-    label
+    label,
+    search
   };
 }
 

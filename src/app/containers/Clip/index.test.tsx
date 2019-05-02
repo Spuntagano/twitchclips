@@ -15,7 +15,8 @@ const state = createState({
     labels: {
       top: [],
       single: [...Object.keys(clipMock)]
-    }
+    },
+    search: {}
   }
 });
 

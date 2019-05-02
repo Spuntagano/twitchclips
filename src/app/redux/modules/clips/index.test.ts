@@ -29,7 +29,7 @@ describe('Clips Module', () => {
 
         const expectedActions: IClipsAction[] = [
           { type: GET_CLIPS_REQUEST },
-          { type: GET_CLIPS_SUCCESS, data: clipMock, label: 'top' },
+          { type: GET_CLIPS_SUCCESS, data: clipMock, label: 'top', search: {} },
         ];
 
         const store = mockStore({});
@@ -75,7 +75,7 @@ describe('Clips Module', () => {
 
         const expectedActions: IClipsAction[] = [
           { type: GET_CLIPS_REQUEST },
-          { type: GET_CLIPS_SUCCESS, data: clipMock, label: 'single' },
+          { type: GET_CLIPS_SUCCESS, data: clipMock, label: 'single', search: {} },
         ];
 
         const store = mockStore({});

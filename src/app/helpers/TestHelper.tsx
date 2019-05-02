@@ -55,7 +55,8 @@ function createState(s?: Partial<IStore>): IStore {
       labels: {
         top: [],
         single: []
-      }
+      },
+      search: {}
     },
     games: {
       isFetching: false,

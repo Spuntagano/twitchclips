@@ -58,9 +58,9 @@ const store = configureStore(createMemoryHistory());
 // https://crypt.codemancers.com/posts/2017-06-03-reactjs-server-side-rendering-with-router-v4-and-redux/
 app.get('*', async (req, res) => {
   const branch = matchRoutes(routes, req.url);
-  const promises = branch.map(({ route }) => {
+  const promises = branch.map(({ route, match }) => {
     const fetchData = (route.component as any).fetchData;
-    return fetchData instanceof Function ? fetchData(store) : Promise.resolve(null);
+    return fetchData instanceof Function ? fetchData(store, match) : Promise.resolve(null);
   });
 
   await Promise.all(promises);
