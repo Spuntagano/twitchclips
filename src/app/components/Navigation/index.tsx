@@ -62,7 +62,7 @@ class NavigationC extends React.Component<IProps> {
     const { clips } = this.props;
 
     this.props.history.push({
-      pathname: `/game/${values.name}/${clips.search.period}`
+      pathname: `/channel/${values.name}/${clips.search.period}`
     });
   }
 
@@ -138,7 +138,7 @@ class NavigationC extends React.Component<IProps> {
 
   public render() {
     return (
-      <div className={style.Nav}>
+      <div className={style.Navigation}>
         <div className={style.searchBarContainer}>
           <Form onSubmit={this.onSearch()} render={this.renderForm} />
         </div>

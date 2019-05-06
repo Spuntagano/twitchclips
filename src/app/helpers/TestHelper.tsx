@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { mount, ComponentClass } from 'enzyme';
 import { Provider } from 'react-redux';
-import { createStore, Middleware } from 'redux';
+import { createStore, Middleware, AnyAction, Store } from 'redux';
 import { MemoryRouter, Route } from 'react-router';
 import rootReducer from '../redux/reducers';
 import configureStore from 'redux-mock-store';
@@ -15,9 +15,11 @@ const middlewares: Middleware[] = [];
 const mockStore = configureStore(middlewares);
 
 /** Render Component */
-function renderComponent<T>(Component: ComponentClass<T>, props: any = {}, state: IStore = createState()) {
-  const store = createStore(rootReducer, state ? state : {});
-
+function renderComponent<T>(
+  Component: ComponentClass<T>,
+  props: any = {},
+  store: Store<IStore, AnyAction> = createStore(rootReducer, {})
+) {
   return mount(
     <Provider store={store}>
       <MemoryRouter>
@@ -29,15 +31,13 @@ function renderComponent<T>(Component: ComponentClass<T>, props: any = {}, state
 
 function renderComponentWithRouter<T>(
   Component: ComponentClass<T>,
-  state: IStore = createState(),
-  pathname: string,
-  search: string,
+  store: Store<IStore, AnyAction> = createStore(rootReducer, {}),
+  pathname: string = '',
+  search: string = '',
   pathToMatch: string = '/',
   initialEntries: string[] = [pathname + search],
   initialIndex: number = 0
 ) {
-  const store = createStore(rootReducer, state ? state : {});
-
   return mount(
     <MemoryRouter initialEntries={initialEntries} initialIndex={initialIndex}>
       <Provider store={store}>

@@ -92,12 +92,12 @@ class HomeC extends React.Component<RouteComponentProps<IMatchParams> & IProps> 
   }
 
   public render() {
-    const { clips } = this.props;
+    const { clips, history } = this.props;
 
     return (
       <div className={style.Home}>
         <Content>
-          <Filters />
+          <Filters history={history} clips={clips} />
           {clips.isFetching && <Spinner />}
           {clips.error && <h2>Error loading clips</h2>}
           {!clips.isFetching && !clips.error && !clips.labels.top.length && <h2>No results found</h2>}

@@ -1,34 +1,23 @@
 import * as React from 'react';
-import {withRouter as router } from 'react-router-dom';
 import Select from 'antd/lib/select';
 import _ from 'lodash';
-import { RouteComponentProps } from 'react-router';
 import { Form, FormRenderProps } from 'react-final-form';
-import { Dispatch } from 'redux';
-import { connect } from 'react-redux';
-import { IClipsAction, IClipsRequest } from '../../redux/modules/clips';
-import { IStore } from '../../redux/IStore';
+import { IClipsRequest } from '../../redux/modules/clips';
 import { History } from 'history';
 
 const Option = Select.Option;
 const style = require('./style.scss');
 
 interface IProps {
-  dispatch: Dispatch;
   clips: IClipsRequest;
   history: History;
 }
 
-interface IMatchParams {
-  type: string;
-  title: string;
-}
-
-class NavigationC extends React.Component<RouteComponentProps<IMatchParams> & IProps> {
+class FiltersC extends React.Component<IProps> {
   public onSubmit: () => () => void;
   public onChange: () => (values: string) => void;
 
-  constructor(props: RouteComponentProps<IMatchParams> & IProps) {
+  constructor(props: IProps) {
     super(props);
 
     this.onSubmit = () => () => { return; };
@@ -79,9 +68,4 @@ class NavigationC extends React.Component<RouteComponentProps<IMatchParams> & IP
   }
 }
 
-export const Filters = connect(
-  (state: IStore) => {
-    return { clips: state.clips };
-  },
-  (d: Dispatch<IClipsAction>) => ({ dispatch: d })
-)(router(NavigationC as any));
+export const Filters = FiltersC;
